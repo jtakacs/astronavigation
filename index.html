@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="sextant.png" />
+  <title>Celestial Navigation</title>
+  <link rel="stylesheet" type="text/css" href="pyscript/pyscript.css" />
+  <link rel="stylesheet" type="text/css" href="node_modules/@kor-ui/kor/kor-styles.css" />
+  <link rel="stylesheet" type="text/css" href="node_modules/katex/dist/katex.min.css" />
+  <style>
+    @media (prefers-color-scheme: dark) {
+      body {
+        color: whitesmoke;
+        background-color: black;
+      }
+    }
+
+    body {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      color: whitesmoke;
+      background-color: black;
+    }
+
+    a:link {
+      color: rgb(98, 219, 254);
+    }
+
+    a:visited {
+      color: rgb(98, 219, 254)
+    }
+
+    a:hover {
+      color: rgb(0, 200, 255);
+    }
+
+    a:active {
+      color: rgb(225, 248, 255);
+    }
+
+    #canvas {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      overflow: hidden;
+      background-color: black;
+    }
+
+    #page {
+      display: none;
+    }
+
+    .topbtn {
+      background-color: rgb(var(--base-0));
+    }
+
+    .topbtn:hover {
+      background-color: rgb(var(--accent-1));
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <load    ="html/header.html" />
+  <div id="container" style="display: none;">
+    <load    ="html/observer.html" />
+    <load    ="html/sights.html" />
+    <load    ="html/worksheet.html" />
+    <load    ="html/challenges.html" />
+    <load    ="html/help.html" />
+    <load    ="html/python_connector.html" />
+    <script defer type="module" src="node_modules/katex/dist/katex.min.js"></script>
+    <script defer type="module" src="node_modules/katex/contrib/mathtex-script-type/mathtex-script-type.js"></script>
+    <script type="module" src="app.js"></script>
+    <script type="module" src="degree.js"></script>
+    <script type="module" src="time.js"></script>
+    <script defer src="/pyscript/pyscript.js" type="module"></script>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+<kor-page id="page">
+    <kor-app-bar slot="top" style="background:transparent;">
+        <kor-button icon="menu" color="tertiary" class="topbtn" onclick="document.querySelector('#menu').visible = true"></kor-button>
+        <kor-button label="Observer" icon="anchor" color="tertiary" class="topbtn" onclick="document.querySelector('#form1').visible = true"></kor-button>
+        <kor-button label="Sights" icon="auto_awesome" color="tertiary" class="topbtn" onclick="document.querySelector('#form2').visible = true"></kor-button>
+        <kor-button label="Location fix" icon="architecture" color="tertiary" class="topbtn" onclick="document.querySelector('#form5').visible = true"></kor-button>
+        <kor-button label="Examples" icon="explore" color="tertiary" class="topbtn" onclick="document.querySelector('#form6').visible = true"></kor-button>
+        <kor-button label="Info" icon="help_outline" color="tertiary" class="topbtn" onclick="document.querySelector('#form7').visible = true"></kor-button>
+    </kor-app-bar>
+</kor-page>
+<kor-drawer id="menu" width="20%">
+    <kor-toggle id="latlongrid" label="Lat/Lon Grid" tabindex="0"></kor-toggle>
+    <kor-toggle id="constellations" label="Constellations" active tabindex="0"></kor-toggle>
+    <kor-slider id="waterslide" label="Water Opacity" value="0.666" min="0" max="1" step="0.001" input no-clear tabindex="0"></kor-slider>
+    <kor-slider id="skyrotation" label="Sky Rotation" value="0" min="0" max="360" step="0.1" input no-clear tabindex="0"></kor-slider>
+    Shortcuts<br />
+    l / L: toggle lat/lon grid<br />
+    c / C: toggle constellations<br />
+    w / W: water opacity +/-<br />
+    r / R: rotate sky +0.1&deg; / +1&deg;<br />
+    t / T: rotate sky -0.1&deg; / -1&deg;<br />
+    <kor-button id="reset" icon="delete_sweep" tabindex="0">Reset forms</kor-button>
+</kor-drawer>

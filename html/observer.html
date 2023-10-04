@@ -1,0 +1,92 @@
+<kor-modal id="form1" label="Observation data" height="80%">
+    <kor-grid columns="2" spacing="l">
+        <b grid-rows="3">Observation method</b>
+        <kor-input id="obs-method" value="sextant" type="select" no-clear tabindex="0" grid-rows="3">
+            <kor-menu-item label="sextant" active></kor-menu-item>
+            <kor-menu-item label="bubble sextant"></kor-menu-item>
+            <kor-menu-item label="theodolite"></kor-menu-item>
+            <kor-menu-item label="cellphone"></kor-menu-item>
+        </kor-input>
+        <b grid-rows="3">Date</b>
+        <kor-input id="obs-date" type="date" no-clear tabindex="0" grid-rows="3"></kor-input>
+        <b grid-rows="3">Timezone</b>
+        <kor-slider id="obs-timezone" label="GMT" min="-12" max="12" value="0" step="1" input no-clear tabindex="0" grid-rows="3"></kor-slider>
+        <b grid-rows="3">Watch Error</b>
+        <kor-input id="obs-watcherr" label="seconds" type="number" value="0" min="-3600" max="3600" no-clear tabindex="0" grid-rows="3"></kor-input>
+        <b grid-rows="3">Index Error</b>
+        <kor-input id="obs-indexerr" label="minutes" type="number" value="0" min="-60" max="60" no-clear tabindex="0" grid-rows="3"></kor-input>
+        <b grid-rows="3">Eye Height</b>
+        <kor-input id="obs-height" label="meter" type="number" value="0" min="0" no-clear tabindex="0" grid-rows="3"></kor-input>
+        <b grid-rows="3">Pressure</b>
+        <kor-input id="obs-pressure" label="millibar" type="number" value="1010" min="0" no-clear tabindex="0" grid-rows="3"></kor-input>
+        <b grid-rows="3">Temperature</b>
+        <kor-input id="obs-temp" label="Celsius" type="number" value="10" min="-273.15" max="5600" no-clear tabindex="0" grid-rows="3"></kor-input>
+        <b grid-rows="3">Speed</b>
+        <kor-input id="obs-speed" label="knots" type="number" value="0" min="0" no-clear tabindex="0" grid-rows="3"></kor-input>
+        <b grid-rows="3">Bearing</b>
+        <degree-input id="obs-bearing" min="-360" max="360" grid-rows="3"></degree-input>
+        <b grid-rows="3">Ded. Reckoning Latitude</b>
+        <degree-input id="obs-drlat" min="-90" max="90" grid-rows="3"></degree-input>
+        <b grid-rows="3">Ded. Reckoning Longitude</b>
+        <degree-input id="obs-drlon" min="-180" max="180" grid-rows="3"></degree-input>
+        <b grid-rows="3">Actual Position</b>
+        <kor-toggle id="obs-actpos" label="Actual Position Is Known" grid-rows="3"></kor-toggle>
+        <b grid-rows="3">Actual Latitude</b>
+        <degree-input disabled id="obs-actlat" min="-90" max="90" grid-rows="3"></degree-input>
+        <b grid-rows="3">Actual Longitude</b>
+        <degree-input disabled id="obs-actlon" min="-180" max="180" grid-rows="3"></degree-input>
+    </kor-grid>
+    <kor-button slot="footer" color="primary" label="Next" icon="east" tabindex="0" onclick="document.querySelector('#form1').visible = false;document.querySelector('#form2').visible = true;"></kor-button>
+    <kor-tooltip target="#obs-method" position="right">
+        <kor-text size="body-2">
+            <kor-icon icon="lightbulb" size="s" color="#dd2"></kor-icon>
+            Dip correction depends on the observation method.<br />
+            sextant: stanard dip correction<br />
+            bubble sextant: half of the measured altitude with index error<br />
+            theodolite: 90&deg; minus zenith angle measurement<br />
+            cellphone: no dip correction
+        </kor-text>
+    </kor-tooltip>
+    <kor-tooltip target="#obs-indexerr" position="right">
+        <kor-text size="body-2" grid-cols="2" grid-rows="3">
+            <kor-icon icon="lightbulb" size="s" color="#dd2"></kor-icon>
+            Index Error will be added to the altitude.<br />
+            Positive if IE is OFF the arc, negative if IE is ON the arc.
+        </kor-text>
+    </kor-tooltip>
+    <kor-tooltip target="#obs-watcherr" position="right">
+        <kor-text size="body-2" grid-cols="2" grid-rows="3">
+            <kor-icon icon="lightbulb" size="s" color="#dd2"></kor-icon>
+            Watch Error will be added to Watch Time.<br />
+            Positive if watch is behind current time, negative if ahead of current time.
+        </kor-text>
+    </kor-tooltip>
+    <kor-tooltip target="#obs-speed" position="right">
+        <kor-text size="body-2" color="#d22" grid-cols="2"><kor-icon icon="warning" size="s" color="#d22"></kor-icon>Running fix not implemented yet.</kor-text>
+    </kor-tooltip>
+    <kor-tooltip target="#obs-bearing" position="right">
+        <kor-text size="body-2" grid-cols="2" grid-rows="3">
+            <kor-icon icon="lightbulb" size="s" color="#dd2"></kor-icon>
+            All degree type fields accept decimal values.<br />
+            The separator between degrees, minutes and seconds can be any non-numeric character.
+        </kor-text>
+    </kor-tooltip>
+    <kor-tooltip target="#obs-drlat" position="right">
+        <kor-text size="body-2" grid-cols="2" grid-rows="3">
+            <kor-icon icon="lightbulb" size="s" color="#dd2"></kor-icon>
+            All degree type fields accept decimal values.<br />
+            The separator between degrees, minutes and seconds can be any non-numeric character.
+        </kor-text>
+    </kor-tooltip>
+    <kor-tooltip target="#obs-drlon" position="right">
+        <kor-text size="body-2" grid-cols="2" grid-rows="3">
+            <kor-icon icon="lightbulb" size="s" color="#dd2"></kor-icon>
+            All degree type fields accept decimal values.<br />
+            The separator between degrees, minutes and seconds can be any non-numeric character.
+        </kor-text>
+    </kor-tooltip>
+    <kor-tooltip target="#obs-actpos" position="right">
+        <kor-icon icon="lightbulb" size="s" color="#dd2"></kor-icon>If the actual position of the
+        observer is known, then the distance between it and the location fix will be calculated as the last step.
+    </kor-tooltip>
+</kor-modal>

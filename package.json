@@ -1,0 +1,34 @@
+{
+  "name": "celestial_navigation",
+  "version": "1.0.0",
+  "description": "[https://jtakacs.github.io](https://jtakacs.github.io)",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jtakacs/jtakacs.github.io.git"
+  },
+  "author": "Takács János",
+  "license": "GPL3",
+  "bugs": {
+    "url": "https://github.com/jtakacs/jtakacs.github.io/issues"
+  },
+  "homepage": "https://github.com/jtakacs/jtakacs.github.io#readme",
+  "dependencies": {
+    "@kor-ui/kor": "^1.11.3",
+    "katex": "^0.16.8",
+    "lit": "^2.8.0",
+    "three": "^0.157.0"
+  },
+  "devDependencies": {
+    "node-fetch": "^3.3.0",
+    "vite": "^4.2.0",
+    "vite-plugin-esmodule": "^1.4.4",
+    "vite-plugin-html-inject": "^1.0.4",
+    "webpack": "^5.88.2"
+  }
+}
