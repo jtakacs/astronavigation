@@ -5,6 +5,8 @@ apikey.js
 
 pyodide/
 
+dist/
+
 # Logs
 logs
 *.log

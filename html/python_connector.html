@@ -12,7 +12,6 @@
             "from": "almanac", 
             "to_folder": "almanac", 
             "files": [ 
-                "__init__.py", 
                 "Hipparcos.csv", 
                 "finals2000A.all", 
                 "de421.bsp", 
@@ -29,6 +28,8 @@
     }
 </py-config>
 <py-script>
+    from pathlib import Path
+    Path('almanac/__init__.py').touch()
     from pyodide.ffi import create_proxy, to_js
     from js import window, console, Object
     from almanac.almanac import *
