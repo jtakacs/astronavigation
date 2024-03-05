@@ -5,6 +5,7 @@ import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { scaleVector, toCartesian, earth_radius_in_meters, radian } from './celnav.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
 const txt = (function () {
     const textureLoader = new THREE.TextureLoader();
@@ -37,6 +38,7 @@ const star_distance = 7e4;
 const origin = new THREE.Vector3(0, 0, 0);
 
 const scene = new THREE.Scene();
+//scene.add(new THREE.AxesHelper(100));
 const gp_vectors = [];
 
 const curve = new THREE.EllipseCurve(0, 0, earth_display_radius, earth_display_radius, 0, TAU, false, 0).getPoints(128).map(p => [p.x, p.y, 0]).flat(2);
@@ -57,6 +59,8 @@ function circle(lat, deg) {
         ellipse.position.y = sin(deg * radian) * earth_display_radius;
     } else {
         ellipse.rotateY(deg * radian);
+        const sc = 1.001;
+        ellipse.scale.set(sc, sc, sc);
     }
     return ellipse;
 }
@@ -81,6 +85,8 @@ const earth = new THREE.Mesh(
         side: THREE.DoubleSide,
     })
 );
+earth.layers.enableAll();
+
 
 const hdrEquirect = new RGBELoader().load('textures/test.hdr', () => hdrEquirect.mapping = THREE.EquirectangularReflectionMapping);
 const normalMapTexture = txt('textures/normal.jpg', THREE.NoColorSpace);
@@ -135,13 +141,25 @@ scene.add(sun);
 scene.add(new THREE.AmbientLight(0xffffff, 2));
 
 function reset3D() {
-    gp_vectors.forEach(line => scene.remove(line));
+    gp_vectors.forEach(item => scene.remove(item));
     gp_vectors.splice(0);
 }
 
 function latlon_vector(latlon, scale = false) {
     const vec = scaleVector((scale === false) ? earth_display_radius : scale, toCartesian(latlon));
     return new THREE.Vector3(vec.x, vec.z, -vec.y);
+}
+
+function draw_text(pos, text) {
+    const star_div = document.createElement('div');
+    star_div.className = 'starlabel';
+    star_div.textContent = text;
+    star_div.style.backgroundColor = 'transparent';
+    const star_label = new CSS2DObject(star_div);
+    star_label.position.copy(pos);
+    star_label.layers.set(1);
+    scene.add(star_label);
+    gp_vectors.push(star_label);
 }
 
 function draw_fix(fix, worksheet) {
@@ -155,6 +173,7 @@ function draw_fix(fix, worksheet) {
     const observer_GP = rod(origin, observer2, colors[5]);
     scene.add(observer_GP);
     gp_vectors.push(observer_GP);
+    draw_text(observer, 'observer');
 
     worksheet.forEach((obj, idx) => {
         const lm = obj.type == 'landmark';
@@ -167,6 +186,9 @@ function draw_fix(fix, worksheet) {
             scene.add(arrow2);
             gp_vectors.push(arrow2);
         }
+
+        draw_text(latlon_vector(obj, earth_display_radius), obj.name);
+
         const r_circle = earth_display_radius * cos(obj.angle * radian);
         const geom = new THREE.CylinderGeometry(r_circle, r_circle, 0, 360, 1, true);
         const mat = new THREE.MeshBasicMaterial({
@@ -198,6 +220,7 @@ function init3D() {
     camera.position.set(7, 7, 7);
     scene.add(camera);
     camera.updateProjectionMatrix();
+    camera.layers.enableAll();
 
     const renderer = new THREE.WebGLRenderer({
         canvas: document.querySelector('#canvas'),
@@ -210,15 +233,25 @@ function init3D() {
     renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
     renderer.setClearColor(0x000000, 0);
 
-    const orbitControls = new OrbitControls(camera, renderer.domElement);
+    const labelRenderer = new CSS2DRenderer();
+    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.top = '0px';
+    labelRenderer.domElement.style.left = '0px';
+    document.body.appendChild(labelRenderer.domElement);
+
+    const orbitControls = new OrbitControls(camera, labelRenderer.domElement);
     orbitControls.enablePan = false;
     orbitControls.minDistance = earth_display_radius * 1.5;
     orbitControls.maxDistance = star_distance * 3;
 
     window.addEventListener('resize', function () {
-        camera.aspect = window.innerWidth / window.innerHeight;
+        const ww = window.innerWidth;
+        const wh = window.innerHeight;
+        camera.aspect = ww / wh;
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(ww, wh);
+        labelRenderer.setSize(ww, wh);
     });
 
     app_state.water = water;
@@ -226,10 +259,14 @@ function init3D() {
     app_state.constellations = { a: starmap, b: starsky };
     app_state.latlon_lines = latlon_lines;
     app_state.draw_fix = draw_fix;
+    app_state.toggle_labels = function () {
+        camera.layers.toggle(1);
+    };
 
     function reanimate() {
         orbitControls.update();
         renderer.render(scene, camera);
+        labelRenderer.render(scene, camera);
         requestAnimationFrame(reanimate);
     };
     requestAnimationFrame(reanimate);
@@ -238,4 +275,4 @@ function init3D() {
 export {
     init3D,
     reset3D,
-}
+};

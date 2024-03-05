@@ -140,6 +140,7 @@ function createGUI() {
   const sw_latlongrid = attr('latlongrid', 'active', app_state.latlon_lines_visible);
   const skyrotation = attr('skyrotation', 'value', app_state.sky_rotation);
   const sw_const = attr('constellations', 'active', app_state.constellations_visible);
+  const sw_labels = attr('starlabels', 'active', app_state.toggle_labels);
   const waterslide = attr('waterslide', 'value', app_state.water_opacity);
   const star_alt = el('star-altitude');
   const star_time = el('star-time');
@@ -205,7 +206,7 @@ function createGUI() {
     }
   });
 
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 9; i++) {
     listen_with_enter(`getfix-${i}`, 'click', e => {
       app_state.data = JSON.parse(JSON.stringify(examples[i]));
       const d = app_state.data;
@@ -221,7 +222,7 @@ function createGUI() {
 
   listen_with_enter('calc-fix', 'click', e => {
     attr('form2', 'visible', false);
-    get_data_from_forms()
+    get_data_from_forms();
     getLocationFix();
   });
 
@@ -242,7 +243,7 @@ function createGUI() {
     const dist = land_dist.value;
     app_state.data.landmarks.push({ id: id(), name: n, lat: lat, lon: lon, distance: dist });
     update_table(land_table, app_state.data.landmarks, land_row);
-  })
+  });
 
   listen_with_enter('save-csv', 'click', e => {
     const d = new Date();
@@ -283,6 +284,10 @@ function createGUI() {
     app_state.latlon_lines.needsUpdate = true;
   });
 
+  listen(sw_labels, 'active-changed', e => {
+    app_state.toggle_labels();
+  });
+
   listen(sw_act_pos, 'active-changed', e => {
     attr(obs_actlat, 'disabled', !sw_act_pos.active);
     attr(obs_actlon, 'disabled', !sw_act_pos.active);
@@ -309,10 +314,14 @@ function createGUI() {
         }
         app_state.skymap.needsUpdate = true;
         break;
-      case 'KeyL':
+      case 'KeyG':
         app_state.latlon_lines_visible = !app_state.latlon_lines_visible;
         app_state.latlon_lines.visible = app_state.latlon_lines_visible;
         sw_latlongrid.active = app_state.latlon_lines_visible;
+        break;
+      case 'KeyL':
+        sw_labels.active = !sw_labels.active;
+        //app_state.toggle_labels();
         break;
       default:
     }
@@ -357,4 +366,4 @@ function createGUI() {
 
 export {
   createGUI
-}
+};

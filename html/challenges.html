@@ -9,6 +9,7 @@
             <kor-tab-item id="ch-item-5" label="Tiny Captain"></kor-tab-item>
             <kor-tab-item id="ch-item-6" label="Proto Thad"></kor-tab-item>
             <kor-tab-item id="ch-item-7" label="Hawaii"></kor-tab-item>
+            <kor-tab-item id="ch-item-8" label="Shoebill"></kor-tab-item>
         </kor-tabs>
         <kor-card id="ch-tab-0" flex-direction="column" flat style="background-color: rgb(var(--base-3)); overflow-y: scroll;">
             <kor-text size="body-1">
@@ -348,6 +349,46 @@
             <b>Challenge:</b> Find your position as accurately as you can!<br />
             Actual location: 28&deg; 32' N, 142&deg; 39.6' W
         </kor-card>
+        <kor-card id="ch-tab-8" flex-direction="column" flat style="display:none; background-color: rgb(var(--base-3)); overflow-y: scroll;">
+            <kor-text size="header-1">
+                Shoebill's measurements
+            </kor-text>
+            <kor-text size="body-1">
+                Date: November 17th, 2023<br />
+                Timezone: GMT+0<br />
+                Heading: 0&deg;<br />
+                Speed: 0 knots<br />
+                Index error: 0'<br />
+                Watch error: 0 sec<br />
+                Eye height: 9 feet<br />
+                Temperature: 10 &deg;C<br />
+                Pressure: 1010 mbar<br />
+            </kor-text>
+            <kor-table condensed readonly style="width: 50%">
+                <kor-table-row slot="header">
+                    <kor-table-cell head grid-cols="8">Star</kor-table-cell>
+                    <kor-table-cell head grid-cols="8">Sextant reading</kor-table-cell>
+                    <kor-table-cell head grid-cols="8">Time</kor-table-cell>
+                </kor-table-row>
+                <kor-table-row>
+                    <kor-table-cell head grid-cols="8">Rigel</kor-table-cell>
+                    <kor-table-cell head grid-cols="8">13&deg;0.1'</kor-table-cell>
+                    <kor-table-cell head grid-cols="8">2 : 20 : 42.4</kor-table-cell>
+                </kor-table-row>
+                <kor-table-row>
+                    <kor-table-cell head grid-cols="8">Vega</kor-table-cell>
+                    <kor-table-cell head grid-cols="8">15&deg; 33.9'</kor-table-cell>
+                    <kor-table-cell head grid-cols="8">2 : 56 : 18.6</kor-table-cell>
+                </kor-table-row>
+                <kor-table-row>
+                    <kor-table-cell head grid-cols="8">Fomalhaut</kor-table-cell>
+                    <kor-table-cell head grid-cols="8">12&deg;59'</kor-table-cell>
+                    <kor-table-cell head grid-cols="8">2 : 52 : 20.7</kor-table-cell>
+                </kor-table-row>
+            </kor-table>
+            <b>Challenge:</b> Find your position as accurately as you can!<br />
+            Actual location: 39&deg; 42' 41.103334" N, 77&deg; 44' 27.12836" W
+        </kor-card>
     </kor-page>
     <kor-card id="ch-btns-0" slot="footer" flex-direction="row" flat>
         <a href="https://youtu.be/g27P_vaARvo?t=1584" target="_blank" rel="noopener noreferrer">
@@ -408,5 +449,8 @@
             <kor-button icon="auto_stories">David Burch Navigation Blog</kor-button>
         </a>
         <kor-button id="getfix-7">Get location fix</kor-button>
+    </kor-card>
+    <kor-card id="ch-btns-8" slot="footer" flex-direction="row" flat style="display:none;">
+        <kor-button id="getfix-8">Get location fix</kor-button>
     </kor-card>
 </kor-modal>

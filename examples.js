@@ -186,7 +186,29 @@ const examples = [
             { name: 'Moon LL', alt: degree2decimal(42, 6.8, 0), time: { h: 7, m: 14, s: 25 } },
         ],
     },
-    { // #8
+    { // #8  Shoebill
+        date: { y: 2023, m: 11, d: 17 },
+        timezone: 0,
+        observer_height_meter: 0,
+        heading: 0,
+        speed_knots: 0,
+        dr_lat: 0,
+        dr_lon: 0,
+        index_error: 0,
+        watch_error: 0,
+        temperature_celsius: 10,
+        pressure_mbar: 1010,
+        compare_location: true,
+        actual_location: { lat: degree2decimal(39, 42, 41.103334), lon: -degree2decimal(77, 44, 27.12836) },
+        method: 'sextant',
+        landmarks: [],
+        stars: [
+            { name: 'Rigel', alt: degree2decimal(13, 0.1, 0), time: { h: 2, m: 20, s: 42.4 } },
+            { name: 'Vega', alt: degree2decimal(15, 33.9, 0), time: { h: 2, m: 56, s: 18.6 } },
+            { name: 'Fomalhaut', alt: degree2decimal(12, 59, 0), time: { h: 2, m: 52, s: 20.7 } },
+        ],
+    },
+    { // #9
         // TODO this one does not work
         date: { y: 2022, m: 10, d: 1 },
         timezone: 0,
