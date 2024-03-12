@@ -1,0 +1,18 @@
+date:2022-03-28#$100 challenge
+observer height:380.5933968 meter
+timezone:GMT-5
+refraction:standard
+method:cellphone
+compare:46° 38' 36.4"N, 93° 22' 31.6"W
+
+star:Arcturus 
+alt:45.7 
+time:00:22:33
+
+star:Polaris
+alt:45.6
+time:00:21:45
+
+star:Procyon
+alt:25.2
+time:00:19:51

@@ -1,0 +1,135 @@
+# FTFE's challenge
+
+date: 1982-07-18 # test
+
+     height: 2.7432 meter # test
+     
+     timezone: GMT-7  # test
+      # test
+     
+       # test
+        # test # test
+         # test # test # test # test
+         
+         ######## # test
+     
+     
+     heading: 252°# test
+     speed: 6.9 knots # test
+     index error: 0' # test
+     watch error: 0' # test
+     temperature: 10 °C # test
+     pressure: 1010 mbar # test
+     
+  # # FTFE's challenge
+  # 
+  # date: 1982-07-18 # test
+  # 
+  # 
+  # timezone: GMT-7  # test
+  #  # test
+  # 
+  #   # test
+  #    # test # test
+  #     # test # test # test # test
+  #     
+  #     ######## # test
+  # 
+  # height: 2.7432 meter # test
+  # 
+  # heading: 252°# test
+  # speed: 6.9 knots # test
+  # index error: 0' # test
+  # watch error: 0' # test
+  # temperature: 10 °C # test
+  # pressure: 1010 mbar # test
+  # 
+  # compare: # test
+  # 
+  # 
+  #     lat: 25° 15'   # test
+  # 
+  #     lon: -150° 25.9' # test
+  # 
+  # method: sextant # test
+  # 
+  # 
+  #  # test # test
+  # landmark: Hawaii # test
+  # 
+  # latitude: 20.937192° # test
+  #   #   #  # test
+  # 
+  # longitude: -156.347435° # test
+  # 
+  # distance: 1931.213 km # test
+  # star: Vega # test
+  # 
+  # alt: 47, 22.5, 0 # test
+  # 
+  # 
+  # 
+  #  # test
+  # 
+  # time: 22,37, 30 # test
+  # 
+  # 
+  # 
+  # 
+  # planet: Alkaid # test
+  # 
+  # time: 22, 40, 14# test
+  # 
+  # alt: 59, 14.0, 0,  # test
+  # 
+  # 
+compare: # test
+
+
+    lat: 25° 15'   # test
+
+    lon: -150° 25.9' # test
+
+method: sextant # test
+
+
+ # test # test
+landmark: Hawaii # test
+
+latitude: 20.937192° # test
+
+
+ # test
+
+longitude: -156.347435° # test
+
+distance: 1931.213 km # test
+star: Vega # test
+
+alt: 47, 22.5, 0 # test
+
+
+
+ # test
+
+time: 22,37, 30 # test
+
+
+
+
+planet: Alkaid # test
+
+time: 22, 40, 14# test
+
+alt: 59, 14.0, 0,  # test
+
+
+
+
+
+
+
+
+
+
+  # test

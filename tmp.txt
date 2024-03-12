@@ -1,0 +1,12 @@
+body {
+    background-color: black;
+    color: wheat;
+}
+svg.railroad-diagram {
+    background-color: black;
+}
+svg.railroad-diagram path {
+    stroke-width: 3;
+    stroke: wheat;
+    fill: black;
+}
