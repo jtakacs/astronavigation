@@ -1,0 +1,18 @@
+# Shoebill's measurement
+
+date: 2023-11-17
+height: 2.7432 meter
+compare: 39d 42' 41.103334", -77d 44' 27.12836"
+
+star: Rigel
+alt: 13d 0.1'
+time: 2:20:42.4
+
+star: Vega
+alt: 15d 33.9'
+time: 2:56:18.6
+
+star: Fomalhaut
+alt: 12d 59'
+time: 2:52:20.7
+

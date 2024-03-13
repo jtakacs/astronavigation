@@ -1,0 +1,21 @@
+# Tiny Captain's measurement
+
+date: 2003-03-17
+height: 2.7432 meter
+timezone: GMT+3
+heading: 327d
+speed: 13.6 knots
+index error: -2'
+
+star: Regulus
+alt: 33d 58.2'
+time: 19:08:15
+
+star: Capella
+alt: 63d 45'
+time: 19:14:41
+
+star: Aldebaran
+alt: 63d 53.5'
+time: 19:16:31
+

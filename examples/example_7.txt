@@ -1,0 +1,18 @@
+# Proto Thad's measurement
+
+date: 2022-10-01
+height: 2.7432 meter
+compare: 42d 46.9', -87d 45.5'
+
+star: Schedar
+alt: 39d 36.2'
+time: 00:33:24
+
+star: Altair
+alt: 55d 33.8'
+time: 00:34:49
+
+planet: Saturn
+alt: 24d 7'
+time: 00:32:02
+

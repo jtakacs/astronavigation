@@ -27,7 +27,7 @@ zoffset       -> "1"   [0-2]                                                    
 
 method        -> _ "method"i _ ":" _ methodtype                                  {% d=> ({"method":d[5][0]}) %}
 
-index_error   -> _ ie _ ":" _ decminsec sep:*                                    {% d=> ({"index":d[5]}) %}
+index_error   -> _ ie _ ":" _ ("+"|"-"):? decminsec sep:*                        {% d=> ({"index":d[6]*("-"==d[5]?-1:1)}) %}
 
 watch_error   -> _ we _ ":" _ decminsec sep:*                                    {% d=> ({"watch":d[5]}) %}
 
@@ -54,25 +54,25 @@ sights        -> sight     break:+ sight     break:+ sight                      
               |  sight     break:+ landmark  break:+ sight                       {% d=> [d[0],d[4],d[2]] %}
               |  landmark  break:+ sight     break:+ sight                       {% d=> [d[2],d[4],d[0]] %}
 
-sight         -> star break:+ time  break:+ angle                                {% d=> [d[0],d[2],d[4]] %}
-              |  star break:+ angle break:+ time                                 {% d=> [d[0],d[4],d[2]] %}
+sight         -> star break:+ time  break:+ angle                                {% d=> ({"star":d[0],"time":d[2],"angle":d[4]}) %}
+              |  star break:+ angle break:+ time                                 {% d=> ({"star":d[0],"time":d[4],"angle":d[2]}) %}
 
-landmark      -> markname break:+ latitude  break:+ longitude break:+ distance   {% d=> [d[0],d[2],d[4],d[6]] %}
-              |  markname break:+ longitude break:+ latitude  break:+ distance   {% d=> [d[0],d[4],d[2],d[6]] %}
-              |  markname break:+ distance  break:+ latitude  break:+ longitude  {% d=> [d[0],d[4],d[6],d[2]] %}
-              |  markname break:+ distance  break:+ longitude break:+ latitude   {% d=> [d[0],d[6],d[4],d[2]] %}
-              |  markname break:+ latitude  break:+ distance  break:+ longitude  {% d=> [d[0],d[2],d[6],d[4]] %}
-              |  markname break:+ longitude break:+ distance  break:+ latitude   {% d=> [d[0],d[6],d[2],d[4]] %}
+landmark      -> markname break:+ latitude  break:+ longitude break:+ distance   {% d=> ({"mark":d[0],"lat":d[2].lat,"lon":d[4].lon,"dist":d[6]}) %}
+              |  markname break:+ longitude break:+ latitude  break:+ distance   {% d=> ({"mark":d[0],"lat":d[4].lat,"lon":d[2].lon,"dist":d[6]}) %}
+              |  markname break:+ distance  break:+ latitude  break:+ longitude  {% d=> ({"mark":d[0],"lat":d[4].lat,"lon":d[6].lon,"dist":d[2]}) %}
+              |  markname break:+ distance  break:+ longitude break:+ latitude   {% d=> ({"mark":d[0],"lat":d[6].lat,"lon":d[4].lon,"dist":d[2]}) %}
+              |  markname break:+ latitude  break:+ distance  break:+ longitude  {% d=> ({"mark":d[0],"lat":d[2].lat,"lon":d[6].lon,"dist":d[4]}) %}
+              |  markname break:+ longitude break:+ distance  break:+ latitude   {% d=> ({"mark":d[0],"lat":d[6].lat,"lon":d[2].lon,"dist":d[4]}) %}
 
-star          -> _ object   _ ":" _ word                                         {% d=> ({"star":d[5]}) %}
+star          -> _ object   _ ":" _ word                                         {% d=> d[5] %}
 
-time          -> _ "time"i  _ ":" _ hhmmss                                       {% d=> ({"time":d[5]}) %}
+time          -> _ "time"i  _ ":" _ hhmmss                                       {% d=> d[5] %}
 
-angle         -> _ alt _ ":" _ ("+"|"-"):? deg90                                 {% d=> ({"angle":{"sign":("-"==d[5])?-1:1,"deg":d[6]}}) %}
+angle         -> _ alt _ ":" _ ("+"|"-"):? deg90                                 {% d=> ({"sign":("-"==d[5])?-1:1,"deg":d[6]}) %}
 
-markname      -> _ "land"i:? "mark"i  _ ":" _ word                               {% d=> ({"mark":d[6]}) %}
+markname      -> _ "land"i:? "mark"i  _ ":" _ word                               {% d=> d[6] %}
 
-distance      -> _ "dist"i "ance"i:?  _ ":" _ float _ km                         {% d=> ({"dist":d[6]}) %}
+distance      -> _ "dist"i "ance"i:?  _ ":" _ float _ km                         {% d=> d[6] %}
 
 latlon        -> latitude  break:+ longitude                                     {% d=> [d[0],d[2]] %}
               |  longitude break:+ latitude                                      {% d=> [d[2],d[0]] %}
@@ -175,6 +175,8 @@ alt           -> "alt"i "itude"i:?
 
 object        -> "star"i
               |  "planet"i
+              |  "moon"i
+              |  "sun"i
               |  "body"i
               |  "sight"i
               |  "object"i

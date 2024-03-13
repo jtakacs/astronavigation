@@ -36,6 +36,7 @@
         <b grid-rows="3">Actual Longitude</b>
         <degree-input disabled id="obs-actlon" min="-180" max="180" grid-rows="3"></degree-input>
     </kor-grid>
+    <kor-button slot="footer" color="primary" icon="content_paste" tabindex="0" onclick="document.querySelector('#form1').visible = false;document.querySelector('#formtext').visible = true;">Text input</kor-button>
     <kor-button slot="footer" color="primary" label="Next" icon="east" tabindex="0" onclick="document.querySelector('#form1').visible = false;document.querySelector('#form2').visible = true;"></kor-button>
     <kor-tooltip target="#obs-method" position="right">
         <kor-text size="body-2">

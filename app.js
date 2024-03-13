@@ -4,6 +4,22 @@ import { createGUI } from './ui.js';
 
 const app_state = {};
 
+const default_free_text = `date: 2018-11-15
+eye height: 2 meter
+index error: 0.3'
+
+star: Regulus
+alt: 70° 48.7' 0"
+time: 08:28:15
+
+star: Arcturus
+alt: 27° 9.0' 0"
+time: 08:30:30
+
+star: Dubhe
+alt: 55° 18.4' 0" 
+time: 08:32:15`;
+
 function reset_app() {
   const d = new Date();
   app_state.data = {
@@ -30,6 +46,7 @@ function reset_app() {
   app_state.sky_rotation = 0;
   app_state.latlon_lines_visible = false;
   app_state.water_opacity = 0.666;
+  app_state.default_free_text = default_free_text;
 }
 reset_app();
 

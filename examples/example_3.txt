@@ -1,0 +1,21 @@
+## $10k challenge
+
+date: 2018-11-15
+eye height: 2 meter
+
+index error: 0.3'
+temperature: 12 °C
+pressure: 975 mbar
+
+star: Regulus
+alt: 70° 48.7' 0"
+time: 08:28:15
+
+star: Arcturus
+alt: 27° 9.0' 0"
+time: 08:30:30
+
+star: Dubhe
+alt: 55° 18.4' 0" 
+time: 08:32:15
+

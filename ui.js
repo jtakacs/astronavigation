@@ -4,6 +4,7 @@ import { id, el, getval, attr, create, listen, listen_with_enter, html5_date_str
 import { worksheet_table, worksheet_csv } from './formatter.js';
 import { examples } from './examples.js';
 import { reset_app } from './app.js';
+import { parse, validate } from './freetext.js';
 
 function del_event(id) {
   return handler(e => {
@@ -148,6 +149,9 @@ function createGUI() {
   const land_lon = el('land-lon');
   const obs_actlat = el('obs-actlat');
   const obs_actlon = el('obs-actlon');
+  const free_text_input = attr('freetext', 'value', app_state.default_free_text);
+  const grammarerror = el('grammarerror');
+  grammarerror.style.visibility = 'hidden';
 
   const almanac = app_state.almanac;
   const stars = almanac.stars();
@@ -226,6 +230,31 @@ function createGUI() {
     getLocationFix();
   });
 
+  listen_with_enter('calc-fix2', 'click', e => {
+    grammarerror.style.visibility = 'hidden';
+    grammarerror.childNodes.forEach(c => c.nodeType === Node.TEXT_NODE && c.remove());
+    setTimeout(() => {
+      const text = getval(free_text_input);
+      try {
+        const result = parse(text);
+        const valid = validate(result, stars.concat(planets).concat(sunmoon));
+        app_state.data = JSON.parse(JSON.stringify(valid));
+        const d = app_state.data;
+        d.stars.forEach(v => v.id = id());
+        d.landmarks.forEach(v => v.id = id());
+        attr('formtext', 'visible', false);
+        update_forms(d);
+        update_table(star_table, d.stars, star_row);
+        update_table(land_table, d.landmarks, land_row);
+        getLocationFix();
+      } catch (parseError) {
+        console.error(parseError);
+        grammarerror.append(`${parseError}`);
+        grammarerror.style.visibility = 'visible';
+      }
+    }, 1);
+  });
+
   listen_with_enter('add-star', 'click', e => {
     app_state.data.stars.push({
       id: id(),
@@ -301,6 +330,9 @@ function createGUI() {
     app_state.skymap.rotation.y = app_state.sky_rotation * radian;
     app_state.skymap.needsUpdate = true;
   }
+
+  listen(free_text_input, 'keyup', event => event.stopPropagation());
+  listen(free_text_input, 'keydown', event => event.stopPropagation());
 
   listen(document, 'keyup', function (event) {
     switch (event.code) {

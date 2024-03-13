@@ -83,6 +83,35 @@
       /* padding: 2px; */
       background-color: transparent;
     }
+
+    svg.railroad-diagram {
+      background-color: black;
+    }
+
+    svg.railroad-diagram path {
+      stroke-width: 3;
+      stroke: wheat;
+      fill: black;
+    }
+
+    svg.railroad-diagram text {
+      font: bold 14px monospace;
+      text-anchor: middle;
+    }
+
+    svg.railroad-diagram text.label {
+      text-anchor: start;
+    }
+
+    svg.railroad-diagram text.comment {
+      font: italic 12px monospace;
+    }
+
+    svg.railroad-diagram rect {
+      stroke-width: 3;
+      stroke: black;
+      fill: hsl(120, 100%, 90%);
+    }
   </style>
 </head>
 

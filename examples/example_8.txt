@@ -1,0 +1,22 @@
+# Example from the book Hawaii ny sextant
+
+date: 1982-07-16
+height: 2.7432 meter
+timezone: GMT-7
+ded reckoning: 28d 33' , -142d 41'
+compare: 28d 32', -142d 39.6'
+
+compare: 28d 32', -142d 39.6'
+
+star: Deneb
+alt: 47d 23'
+time: 6:55:50
+
+planet: Venus
+alt: 15d 56'
+time: 6:58:30
+
+moon: Moon LL
+alt: 42d 6.8'
+time: 7:14:25
+

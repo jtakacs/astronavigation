@@ -1,0 +1,23 @@
+# FTFE's challenge
+
+date: 1982-07-18
+height: 2.7432 meter
+timezone: GMT-7
+heading: 252°
+speed: 6.9 knots
+compare:
+lat: 25° 15'
+lon: -150° 25.9'
+
+landmark: Hawaii
+latitude: 20.937192°
+longitude: -156.347435°
+distance: 1931.213 km
+
+star: Vega
+alt: 47, 22.5,0
+time: 22,37,30
+
+target: Alkaid
+time: 22, 40, 14
+alt: 59, 14.0, 0

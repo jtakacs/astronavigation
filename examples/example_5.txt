@@ -1,0 +1,20 @@
+# Flerf's challenge
+
+date: 2022-07-13
+height: 32 meter
+timezone: GMT+0
+index error: 2'
+compare: -32.965812, -71.665188
+
+star: Atria
+alt: 16d 2.1'
+time: 11:40:33
+
+star: Canopus
+alt: 40d 8.4'
+time: 11:23:03
+
+star: Rigel
+alt: 39d 18.0'
+time: 11:24:09
+
