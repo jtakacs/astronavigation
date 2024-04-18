@@ -1,9 +1,12 @@
-const { PI, sqrt } = Math;
+const { PI, sqrt, sign } = Math;
 const radian = PI / 180;
 const sin = (angle) => Math.sin(angle * radian);
 const cos = (angle) => Math.cos(angle * radian);
 const atan2 = (y, x) => Math.atan2(y, x) / radian;
 const scaleVector = (s, { x, y, z }) => ({ x: s * x, y: s * y, z: s * z });
+const addVector = ({ x, y, z }, { x: X, y: Y, z: Z }) => ({ x: x + X, y: y + Y, z: z + Z });
+const subVector = ({ x, y, z }, { x: X, y: Y, z: Z }) => ({ x: x - X, y: y - Y, z: z - Z });
+const dotProduct = ({ x, y, z }, { x: X, y: Y, z: Z }) => x * X + y * Y + z * Z;
 const crossProduct = ({ x: x1, y: y1, z: z1 }, { x: x2, y: y2, z: z2 }) => ({
     x: y1 * z2 - z1 * y2,
     y: z1 * x2 - x1 * z2,
@@ -27,22 +30,11 @@ function three_star_fix(star1, star2, star3) {
     const A = sin(star1.angle);
     const B = sin(star2.angle);
     const C = sin(star3.angle);
-    const n1 = {
-        x: B * gp1.x - A * gp2.x,
-        y: B * gp1.y - A * gp2.y,
-        z: B * gp1.z - A * gp2.z,
-    };
-    const n2 = {
-        x: C * gp2.x - B * gp3.x,
-        y: C * gp2.y - B * gp3.y,
-        z: C * gp2.z - B * gp3.z,
-    };
-    const fix1 = crossProduct(n1, n2);
-    const fix2 = scaleVector(-1, fix1);
-    return [
-        toGeographical(fix1),
-        toGeographical(fix2),
-    ];
+    const n1 = subVector(scaleVector(B, gp1), scaleVector(A, gp2));
+    const n2 = subVector(scaleVector(C, gp2), scaleVector(B, gp3));
+    const fix = crossProduct(n1, n2);
+    const s = dotProduct(fix, addVector(gp1, addVector(gp2, gp3)));
+    return toGeographical(scaleVector(sign(s), fix));
 }
 
 export { three_star_fix };
