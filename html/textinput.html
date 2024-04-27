@@ -1,0 +1,8 @@
+<kor-modal id="formtext" icon="content_paste" label="Free text input" height="80%" width="70%">
+    <kor-textarea id="freetext" rows="20"></kor-textarea>
+    <kor-text id="grammarerror" size="body-1" color="#d22"><kor-icon icon="warning" size="m" color="#d22"></kor-icon></kor-text>
+    <kor-button slot="footer" icon="delete_forever" tabindex="0" onclick="document.querySelector('#freetext').value = ''">Clear </kor-button>
+    <a slot="footer" href="https://github.com/jtakacs/astronavigation/tree/main/examples" target="_blank" rel="noopener noreferrer" tabindex="0"><kor-button icon="assignment">Examples</kor-button></a>
+    <kor-button id="showgrammar" slot="footer" tabindex="0" onclick="document.querySelector('#grammar').visible = true;">Grammar</kor-button>
+    <kor-button id="calc-fix2" slot="footer" icon="add_location" tabindex="0">Calculate location fix</kor-button>
+</kor-modal>

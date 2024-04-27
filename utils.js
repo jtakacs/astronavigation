@@ -1,3 +1,5 @@
+const { abs } = Math;
+
 const id = (function () {
     let counter = Number.MIN_SAFE_INTEGER;
     return function () {
@@ -95,6 +97,14 @@ function time_string(time) {
     return `${time.h} : ${time.m} : ${time.s}`;
 }
 
+function metricLength(miles = 0, feet = 0, inches = 0) {
+    return miles * 1609.344 + feet * 0.3048 + inches * 0.0254;
+}
+
+function degree2decimal(deg, min, sec) {
+    return (abs(deg) + abs(min) / 60 + abs(sec) / 3600) * ((deg < 0 || min < 0 || sec < 0) ? -1 : 1);
+}
+
 export {
     id,
     el,
@@ -109,4 +119,6 @@ export {
     dms,
     dms_string,
     time_string,
-}
+    metricLength,
+    degree2decimal,
+};

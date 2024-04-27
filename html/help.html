@@ -37,7 +37,7 @@
             <b>R<sub>0</sub></b>: standard refraction at 1010 mbar and 10 &deg;C<br />
             <script type="math/tex; mode=display">R_0~['] = { \left( tan \left( H_a + \frac{7.31}{H_a + 4.4} \right) \right) }^{-1}</script><br />
             <b>R</b>: refraction
-            <script type="math/tex; mode=display">R~[ \degree ] = f \cdot R_0 \cdot 60</script><br />
+            <script type="math/tex; mode=display">R~[ \degree ] = \frac{f \cdot R_0}{60}</script><br />
             <b>H<sub>r</sub></b>: altitude corrected for refraction<br />
             <script type="math/tex; mode=display">H_r = H_a - R</script><br />
             <b>SD</b>: semidiameter (added for lower limb sights and subtracted for upper limb sights)<br />
@@ -56,7 +56,7 @@
             <b>z</b>: time zone difference in hours<br />
             Eastern timezones are represented as GMT+z, the z value will be subtracted<br />
             Western timezones are represented as GMT-z, the z value will be added<br />
-            If observations are taken around midnight, 24 can be entered in the <i>hours</i> field if an observation falls on the start of the next day. The UTC date will be automatically corrected internally.
+            If observations are taken around midnight, 24 can be entered in the <i>hours</i> field if an observation falls on the start of the next day. The UTC date will be automatically corrected internally.<br />
             <b>WE</b>: watch error in seconds<br />
             positive if watch is behind current time<br />
             negative if watch is ahead current time<br />
@@ -94,8 +94,6 @@
             Declination corresponds to latitude on Earth.<br />
             GHA corresponds to longitude, but GHA is measured from the celestial meridian (Constellation of Aries) towards west in the [0&deg;, 360&deg;] interval, while
             latitude is measured from the Greenwich meridian towards East, in the [-180&deg;, 180&deg;] interval.<br />
-            In the measurements form the geographic position of a landmark can also be added, with the estimated distance from this landmark.<br />
-            The distance will be converted to an altitude angle to draw a circle. Only the intersection points falling inside this circle will be used to calculate the location fix. Useful if there is only two star sights to work with.<br />
             <script type="math/tex; mode=display">H_a = 90\degree - \frac{distance}{r_{Earth}}</script>
         </kor-text>
         <kor-text size="header-1"><kor-icon icon=""></kor-icon>Location fix</kor-text>
@@ -120,7 +118,7 @@
             <script type="math/tex; mode=display">\overrightharpoon{IP_{1,2}} = \overrightharpoon{C} \pm \overrightharpoon{X} \sqrt{\frac{1 - \overrightharpoon{C} \bullet \overrightharpoon{C}}{ \overrightharpoon{X} \bullet \overrightharpoon{X}}}</script>
             <br />
             Next, for each pair of intersection points, their distance is computed using the Haversine formula.<br />
-            The "crooked hat" is formed with the three points that are closest to eachother, within the distance of a landmark if it's given.<br />
+            The "crooked hat" is formed with the three points that are closest to eachother, within the distance of the ded. reckoning position.<br />
             The average of these three points gives the approximate location fix. This is a rather imprecise approximation, so don't rely on this, or don't get surprised when you're lost at sea and sharks bite your arse off.<br />
         </kor-text>
     </kor-card>

@@ -22,13 +22,15 @@
         <b grid-rows="3">Temperature</b>
         <kor-input id="obs-temp" label="Celsius" type="number" value="10" min="-273.15" max="5600" no-clear tabindex="0" grid-rows="3"></kor-input>
         <b grid-rows="3">Speed</b>
-        <kor-input id="obs-speed" label="knots" type="number" value="0" min="0" no-clear tabindex="0" grid-rows="3"></kor-input>
+        <kor-input id="obs-speed" label="knot" type="number" value="0" min="0" no-clear tabindex="0" grid-rows="3"></kor-input>
         <b grid-rows="3">Bearing</b>
         <degree-input id="obs-bearing" min="-360" max="360" grid-rows="3"></degree-input>
+        <b grid-rows="3">Ded. Reckoning</b>
+        <kor-toggle id="obs-hasdr" label="Ded. Reckoning Is Known" grid-rows="3"></kor-toggle>
         <b grid-rows="3">Ded. Reckoning Latitude</b>
-        <degree-input id="obs-drlat" min="-90" max="90" grid-rows="3"></degree-input>
+        <degree-input disabled id="obs-drlat" min="-90" max="90" grid-rows="3"></degree-input>
         <b grid-rows="3">Ded. Reckoning Longitude</b>
-        <degree-input id="obs-drlon" min="-180" max="180" grid-rows="3"></degree-input>
+        <degree-input disabled id="obs-drlon" min="-180" max="180" grid-rows="3"></degree-input>
         <b grid-rows="3">Actual Position</b>
         <kor-toggle id="obs-actpos" label="Actual Position Is Known" grid-rows="3"></kor-toggle>
         <b grid-rows="3">Actual Latitude</b>
@@ -61,9 +63,6 @@
             Watch Error will be added to Watch Time.<br />
             Positive if watch is behind current time, negative if ahead of current time.
         </kor-text>
-    </kor-tooltip>
-    <kor-tooltip target="#obs-speed" position="right">
-        <kor-text size="body-2" color="#d22" grid-cols="2"><kor-icon icon="warning" size="s" color="#d22"></kor-icon>Running fix not implemented yet.</kor-text>
     </kor-tooltip>
     <kor-tooltip target="#obs-bearing" position="right">
         <kor-text size="body-2" grid-cols="2" grid-rows="3">

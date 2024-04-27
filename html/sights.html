@@ -22,25 +22,6 @@
                 <kor-table-cell head grid-cols="3">&nbsp;</kor-table-cell>
             </kor-table-row>
         </kor-table>
-        <kor-text size="header-1" grid-cols="2" grid-rows="3">Distance From Landmarks<kor-icon icon="landscape"></kor-icon></kor-text>
-        <b grid-rows="3">Landmark name</b>
-        <kor-input id="land-name" type="text" label="Landmark name" value="" tabindex="0" grid-rows="3"></kor-input>
-        <b grid-rows="3">Landmark latitude</b>
-        <degree-input id="land-lat" min="-90" max="90" grid-rows="3"></degree-input>
-        <b grid-rows="3">Landmark longitude</b>
-        <degree-input id="land-lon" min="-180" max="180" grid-rows="3"></degree-input>
-        <b grid-rows="3">Approximate Distance</b>
-        <kor-input id="land-dist" type="number" label="kilometers" value="1500" min="1" no-clear tabindex="0" grid-rows="3"></kor-input>
-        <p grid-cols="2" grid-rows="3"><kor-button id="add-landmark" label="Add Landmark" tabindex="0"></kor-button></p>
-        <kor-table id="obs-landmarks" condensed style="width: 100%" grid-cols="2" grid-rows="10">
-            <kor-table-row slot="header">
-                <kor-table-cell head grid-cols="5">Name</kor-table-cell>
-                <kor-table-cell head grid-cols="6">Latitude</kor-table-cell>
-                <kor-table-cell head grid-cols="6">Longitude</kor-table-cell>
-                <kor-table-cell head grid-cols="4">Distance</kor-table-cell>
-                <kor-table-cell head grid-cols="3">&nbsp;</kor-table-cell>
-            </kor-table-row>
-        </kor-table>
     </kor-grid>
     <kor-button slot="footer" color="primary" label="Previous" icon="west" tabindex="0" onclick="document.querySelector('#form2').visible = false;document.querySelector('#form1').visible = true;"></kor-button>
     <kor-button slot="footer" color="primary" icon="content_paste" tabindex="0" onclick="document.querySelector('#form2').visible = false;document.querySelector('#formtext').visible = true;">Text input</kor-button>

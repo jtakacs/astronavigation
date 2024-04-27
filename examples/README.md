@@ -36,7 +36,7 @@ pressure: 975 mbar
 ## optional
 heading: 0°
 
-## optional, also not implemented yet
+## optional
 speed: 12 knots
 
 ## optional block
@@ -55,16 +55,8 @@ lon: 0°
 # lat: -31.154076°
 # lon: 15.503133°
 
-## the last 3 blocks are required
-## provide either three celestial body observations
-## OR two celestial body observations 
-##    and a distance from a known landmark
-
-## example of landmark definition
-# landmark: Hawaii
-# lat: 20.937192°
-# lon: -156.347435°
-# distance: 1931.213 km
+## the last 2 blocks are required
+## provide either two or three celestial body observations
 
 star: Regulus
 ## degree separator can be any non-numeric character
@@ -77,24 +69,25 @@ time: 08:28:15
 
 ## in case of Sun or Moon sights, the 
 ## measured limb must be included in the name.
-## ( Sun UL | Sun LL | Moon UL | Moon LL )
+## Sun UL | Sun LL | Moon UL | Moon LL
 
 ## planet names can be
 ## Venus | Mars | Jupyter | Saturn
 
 ## Star names can be
-## Acamar | Achernar | Acrux | Adhara | Aldebaran | 
-## Alioth | Alkaid | Alnilam | Al Na'ir | Alphard | 
-## Alphecca | Alpheratz | Altair | Atria | Ankaa | 
-## Antares | Arcturus | Avior | Bellatrix | 
-## Betelgeuse | Canopus | Capella | Diphda | Deneb | 
-## Denebola | Dubhe | Elnath | Eltanin | Enif | 
-## Fomalhaut | Gacrux | Gienah | Hadar | Hamal | 
-## Kaus Aust. | Kochab | Markab | Menkar | Menkent | 
-## Miaplacidus | Mirfak | Nunki | Peacock | Polaris | 
-## Pollux | Procyon | Rasalhague | Regulus | Rigel | 
-## Rigil Kent. | Schedar | Sabik | Scheat | Shaula | 
-## Sirius | Suhail | Spica | Vega | Zuben'ubi | 
+| Acamar   | Achernar   | Acrux           | Adhara     | Albireo | Aldebaran
+| Alioth   | Alkaid     | Almaak          | Alnair     | Alnilam | Alphard
+| Alphecca | Alpheratz  | Altair          | Ankaa      | Antares | Arcturus
+| Atria    | Avior      | Bellatrix       | Betelgeuse | Canopus | Capella
+| Castor   | Cor Caroli | Deneb           | Denebola   | Diphda  | Dubhe
+| Elnath   | Eltanin    | Enif            | Fomalhaut  | Gacrux  | Gienah
+| Hadar    | Hamal      | Kaus Australis  | Kochab     | Markab  | Menkar
+| Menkent  | Merak      | Miaplacidus     | Mirfak     | Mizar   | Nunki
+| Peacock  | Phact      | Polaris         | Pollux     | Procyon | Rasalhague
+| Regulus  | Rigel      | Rigil Kentaurus | Sabik      | Saiph   | Scheat
+| Schedar  | Scheddi    | Shaula          | Sirius     | Spica   | Suhail
+| Vega     | Zubenelgenubi
+
 
 star: Arcturus
 alt: 27° 9.0' 0"

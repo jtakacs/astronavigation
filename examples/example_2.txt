@@ -1,4 +1,4 @@
-#$100 challenge
+# $100 challenge
 
 date:2022-03-28
 observer height: 380.5933968 meter

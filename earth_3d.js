@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Line2 } from 'three/examples/jsm/lines/Line2.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
-import { scaleVector, toCartesian, earth_radius_in_meters, radian } from './celnav.js';
+import { scale, to_cartesian, sub, earth_radius_in_meters, radian } from './vector.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
@@ -87,7 +87,6 @@ const earth = new THREE.Mesh(
 );
 earth.layers.enableAll();
 
-
 const hdrEquirect = new RGBELoader().load('textures/test.hdr', () => hdrEquirect.mapping = THREE.EquirectangularReflectionMapping);
 const normalMapTexture = txt('textures/normal.jpg', THREE.NoColorSpace);
 normalMapTexture.wrapS = normalMapTexture.wrapT = THREE.RepeatWrapping;
@@ -145,8 +144,8 @@ function reset3D() {
     gp_vectors.splice(0);
 }
 
-function latlon_vector(latlon, scale = false) {
-    const vec = scaleVector((scale === false) ? earth_display_radius : scale, toCartesian(latlon));
+function latlon_vector(latlon, sc = false) {
+    const vec = scale((sc === false) ? earth_display_radius : sc, to_cartesian(latlon));
     return new THREE.Vector3(vec.x, vec.z, -vec.y);
 }
 
@@ -164,29 +163,48 @@ function draw_text(pos, text) {
 
 function draw_fix(fix, worksheet) {
     reset3D();
-
     starfield.rotation.y = -fix.gha * radian;
 
     const observer = latlon_vector(fix);
-    const observer2 = latlon_vector(fix, 1.1 * earth_display_radius);
+    const observer2 = latlon_vector(fix, 1.3 * earth_display_radius);
 
     const observer_GP = rod(origin, observer2, colors[5]);
     scene.add(observer_GP);
     gp_vectors.push(observer_GP);
     draw_text(observer, 'observer');
+    /*
+   const k = [2, 1, 0];
+   const gp1 = to_cartesian(worksheet[k[0]]);
+   const gp2 = to_cartesian(worksheet[k[1]]);
+   const gp3 = to_cartesian(worksheet[k[2]]);
+   const A = sin(worksheet[k[0]].angle * radian);
+   const B = sin(worksheet[k[1]].angle * radian);
+   const C = sin(worksheet[k[2]].angle * radian);
+   const n1 = sub(scale(B, gp1), scale(A, gp2));
+   const n2 = sub(scale(C, gp2), scale(B, gp3));
+   const plane1 = new THREE.PlaneHelper(new THREE.Plane(new THREE.Vector3(n1.x, n1.z, -n1.y), 0), 2.2 * earth_display_radius, colors[0]);
+   plane1.children[0].material.side = THREE.DoubleSide;
+   plane1.children[0].material.opacity = 0.8;
+   scene.add(plane1);
+   gp_vectors.push(plane1);
+   const plane2 = new THREE.PlaneHelper(new THREE.Plane(new THREE.Vector3(n2.x, n2.z, -n2.y), 0), 2.2 * earth_display_radius, colors[1]);
+   plane2.children[0].material.side = THREE.DoubleSide;
+   plane2.children[0].material.opacity = 0.8;
+   scene.add(plane2);
+   gp_vectors.push(plane2);
+   */
 
     worksheet.forEach((obj, idx) => {
-        const lm = obj.type == 'landmark';
-        const vec = latlon_vector(obj, lm ? 1.1 * earth_display_radius : star_distance);
+        const vec = latlon_vector(obj, star_distance);
+        // const vec = latlon_vector(obj, 1.1 * earth_display_radius);
         const arrow1 = rod(origin, vec, colors[idx]);
         scene.add(arrow1);
         gp_vectors.push(arrow1);
-        if (!lm) {
-            const arrow2 = rod(observer, vec, colors[idx]);
-            scene.add(arrow2);
-            gp_vectors.push(arrow2);
-        }
-
+        /*
+        const arrow2 = rod(observer, vec, colors[idx]);
+        scene.add(arrow2);
+        gp_vectors.push(arrow2);
+        */
         draw_text(latlon_vector(obj, earth_display_radius), obj.name);
 
         const r_circle = earth_display_radius * cos(obj.angle * radian);
@@ -201,9 +219,7 @@ function draw_fix(fix, worksheet) {
             wireframeLinewidth: 4,
         });
         const cone = new THREE.Mesh(geom, mat);
-        let h = sin(obj.angle * radian);
-        if (lm) h /= 1.1;
-        else h *= earth_display_radius / star_distance;
+        let h = sin(obj.angle * radian) * earth_display_radius / star_distance;
         cone.position.x = h * vec.x;
         cone.position.y = h * vec.y;
         cone.position.z = h * vec.z;

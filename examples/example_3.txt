@@ -1,4 +1,4 @@
-## $10k challenge
+# $10k challenge
 
 date: 2018-11-15
 eye height: 2 meter

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="sextant.png" />
+  <title>Solstice 2024</title>
+  <link rel="stylesheet" type="text/css" href="pyscript/pyscript.css" />
+  <link rel="stylesheet" type="text/css" href="node_modules/@kor-ui/kor/kor-styles.css" />
+  <style>
+    @media (prefers-color-scheme: dark) {
+      body {
+        color: whitesmoke;
+        background-color: black;
+      }
+    }
+
+    body {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      color: whitesmoke;
+      background-color: black;
+    }
+
+    a:link {
+      color: rgb(98, 219, 254);
+    }
+
+    a:visited {
+      color: rgb(98, 219, 254)
+    }
+
+    a:hover {
+      color: rgb(0, 200, 255);
+    }
+
+    a:active {
+      color: rgb(225, 248, 255);
+    }
+
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      overflow: hidden;
+      background-color: black;
+    }
+
+    kor-app-bar {
+      box-shadow: none;
+    }
+
+    .topbtn {
+      background-color: rgb(var(--base-0));
+    }
+
+    .topbtn:hover {
+      background-color: rgb(var(--accent-1));
+    }
+
+    .py-overlay {
+      background-color: black;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <div style="display: block;position: absolute;right: 0;top:0;width: 200px;background-color: rgb(60, 100, 240); padding: 2px;text-wrap: nowrap;">
+    <kor-text id="txt-time" size="body-1"></kor-text>
+    <br />
+    <kor-text id="txt-alt" size="body-1"></kor-text>
+    <br />
+    <kor-text id="txt-azi" size="body-1"></kor-text>
+  </div>
+  <kor-page id="page">
+    <kor-app-bar slot="top" style="background:transparent;">
+      <kor-button icon="menu" color="tertiary" class="topbtn" onclick="document.querySelector('#menu').visible = true"></kor-button>
+      <kor-toggle id="tgl-anim" label="Animation" active tabindex="0"></kor-toggle>
+    </kor-app-bar>
+  </kor-page>
+  <kor-drawer id="menu" width="40%">
+    <p><kor-button id="btn-load" icon="refresh" tabindex="0">Load Sun path</kor-button>
+      <kor-spinner id="spinner" label="Loading"></kor-spinner>
+    </p>
+    Date
+    <kor-input id="obs-date" type="date" no-clear tabindex="0" grid-rows="3"></kor-input>
+    Latitude
+    <degree-input id="obs-lat" min="-90" max="90" grid-rows="3"></degree-input>
+    Longitude
+    <degree-input id="obs-lon" min="-180" max="180" grid-rows="3"></degree-input>
+    Elevation
+    <kor-input id="obs-height" label="meter" type="number" value="0" min="0" no-clear tabindex="0" grid-rows="3"></kor-input>
+    Temperature
+    <kor-input id="obs-temp" label="Celsius" type="number" value="10" min="-273.15" max="5600" no-clear tabindex="0" grid-rows="3"></kor-input>
+    Pressure
+    <kor-input id="obs-pressure" label="millibar" type="number" value="1010" min="0" no-clear tabindex="0" grid-rows="3"></kor-input>
+  </kor-drawer>
+  <load    ="html/python_connector.html" />
+  <script type="module" src="solstice.js"></script>
+  <script type="module" src="degree.js"></script>
+  <script type="module" src="time.js"></script>
+  <script defer src="/pyscript/pyscript.js" type="module"></script>
+</body>
+
+</html>

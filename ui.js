@@ -1,22 +1,22 @@
-import { celestial_fix, radian } from './celnav.js';
+import { celestial_fix } from './celnav.js';
 import { reset3D } from './earth_3d.js';
 import { id, el, getval, attr, create, listen, listen_with_enter, html5_date_string, dms_string, time_string, handler } from './utils.js';
-import { worksheet_table, worksheet_csv } from './formatter.js';
+import { worksheet_table, worksheet_csv, format_input_as_text } from './formatter.js';
 import { examples } from './examples.js';
 import { reset_app } from './app.js';
 import { parse, validate } from './freetext.js';
+const radian = Math.PI / 180;
 
 function del_event(id) {
   return handler(e => {
     document.getElementById(`row${id}`).remove();
-    [window.app_state.data.stars, window.app_state.data.landmarks].forEach(tbl => {
-      for (let k = 0; k < tbl.length; k++) {
-        if (id == tbl[k].id) {
-          tbl.splice(k, 1);
-          break;
-        }
+    tbl = window.app_state.data.stars;
+    for (let k = 0; k < tbl.length; k++) {
+      if (id == tbl[k].id) {
+        tbl.splice(k, 1);
+        break;
       }
-    });
+    }
   });
 }
 
@@ -39,28 +39,6 @@ function star_row(table, data) {
   table.append(row);
   cell_icon.addEventListener('click', del_event(data.id));
 }
-function land_row(table, data) {
-  const cell_name = create('kor-table-cell', ['grid-cols', '5']);
-  const cell_lat = create('kor-table-cell', ['grid-cols', '6']);
-  const cell_lon = create('kor-table-cell', ['grid-cols', '6']);
-  const cell_dist = create('kor-table-cell', ['grid-cols', '4']);
-  const cell_del = create('kor-table-cell', ['grid-cols', '3']);
-  const cell_icon = create('kor-icon', ['icon', 'delete_forever', 'button', '']);
-  cell_name.append(data.name);
-  cell_lat.append(dms_string(data.lat));
-  cell_lon.append(dms_string(data.lon));
-  cell_dist.append(`${(data.distance / 1000).toFixed(3)} km`);
-  cell_del.append(cell_icon);
-  const row = create('kor-table-row');
-  attr(row, 'id', `row${data.id}`);
-  row.append(cell_name);
-  row.append(cell_lat);
-  row.append(cell_lon);
-  row.append(cell_dist);
-  row.append(cell_del);
-  table.append(row);
-  cell_icon.addEventListener('click', del_event(data.id));
-}
 
 function update_table(table, app_table, row) {
   for (let i = table.children.length - 1; 0 <= i; i--) {
@@ -79,12 +57,28 @@ function update_forms(data) {
   attr('obs-height', 'value', data.observer_height_meter);
   attr('obs-bearing', 'value', data.heading);
   attr('obs-speed', 'value', data.speed_knots);
-  attr('obs-drlat', 'value', data.dr_lat);
-  attr('obs-drlon', 'value', data.dr_lon);
   attr('obs-indexerr', 'value', 60 * data.index_error);
   attr('obs-watcherr', 'value', data.watch_error);
   attr('obs-pressure', 'value', data.pressure_mbar);
   attr('obs-temp', 'value', data.temperature_celsius);
+  if (data.compare_location) {
+    attr('obs-actpos', 'active', true);
+    el('obs-actlat').value = data.actual_location.lat;
+    el('obs-actlon').value = data.actual_location.lon;
+  } else {
+    attr('obs-actpos', 'active', false);
+    el('obs-actlat').value = 0;
+    el('obs-actlon').value = 0;
+  }
+  if (data.has_dr) {
+    attr('obs-hasdr', 'active', true);
+    el('obs-drlat').value = data.dr.lat;
+    el('obs-drlon').value = data.dr.lon;
+  } else {
+    attr('obs-hasdr', 'active', false);
+    el('obs-drlat').value = 0;
+    el('obs-drlon').value = 0;
+  }
 }
 
 function get_data_from_forms() {
@@ -100,21 +94,24 @@ function get_data_from_forms() {
   d.observer_height_meter = parseFloat(getval('obs-height'));
   d.heading = getval('obs-bearing');
   d.speed_knots = parseFloat(getval('obs-speed'));
-  d.dr_lat = getval('obs-drlat');
-  d.dr_lon = getval('obs-drlon');
+  if (getval('obs-hasdr', 'active')) {
+    d.has_dr = true;
+    d.dr.lat = el('obs-drlat').value;
+    d.dr.lon = el('obs-drlon').value;
+  } else d.has_dr = false;
   d.index_error = parseFloat(getval('obs-indexerr')) / 60;
   d.watch_error = parseFloat(getval('obs-watcherr'));
   d.temperature_celsius = parseFloat(getval('obs-temp'));
   d.pressure_mbar = parseFloat(getval('obs-pressure'));
   if (getval('obs-actpos', 'active')) {
     d.compare_location = true;
-    d.actual_location.lat = getval('obs-actlat');
-    d.actual_location.lon = getval('obs-actlon');
+    d.actual_location.lat = el('obs-actlat').value;
+    d.actual_location.lon = el('obs-actlon').value;
   } else d.compare_location = false;
 }
 
 function getLocationFix() {
-  const { fix, worksheet } = celestial_fix(app_state);
+  const { fix, worksheet } = celestial_fix(window.app_state);
   window.app_state.fix = fix;
   window.app_state.worksheet = worksheet;
   console.log(worksheet);
@@ -132,23 +129,22 @@ function getLocationFix() {
 
 function createGUI() {
   const app_state = window.app_state;
-  const star_select = el('star-name');
-  const star_table = el('obs-stars');
-  const land_table = el('obs-landmarks');
-  const land_name = el('land-name');
-  const land_dist = el('land-dist');
-  const sw_act_pos = el('obs-actpos');
   const sw_latlongrid = attr('latlongrid', 'active', app_state.latlon_lines_visible);
+  const waterslide = attr('waterslide', 'value', app_state.water_opacity);
   const skyrotation = attr('skyrotation', 'value', app_state.sky_rotation);
   const sw_const = attr('constellations', 'active', app_state.constellations_visible);
   const sw_labels = attr('starlabels', 'active', app_state.toggle_labels);
-  const waterslide = attr('waterslide', 'value', app_state.water_opacity);
+  const star_select = el('star-name');
+  const star_table = el('obs-stars');
   const star_alt = el('star-altitude');
   const star_time = el('star-time');
-  const land_lat = el('land-lat');
-  const land_lon = el('land-lon');
+  const sw_act_pos = el('obs-actpos');
   const obs_actlat = el('obs-actlat');
   const obs_actlon = el('obs-actlon');
+  const sw_has_dr = el('obs-hasdr');
+  const obs_drlat = el('obs-drlat');
+  const obs_drlon = el('obs-drlon');
+
   const free_text_input = attr('freetext', 'value', app_state.default_free_text);
   const grammarerror = el('grammarerror');
   grammarerror.style.visibility = 'hidden';
@@ -159,12 +155,7 @@ function createGUI() {
   const sunmoon = almanac.sunmoon();
   function icon(name) {
     if (stars.includes(name)) return 'star';
-    if (planets.includes(name)) {
-      if ('Venus' == name) return 'language';
-      if ('Mars' == name) return 'language';
-      if ('Jupiter' == name) return 'language';
-      if ('Saturn' == name) return 'language';
-    }
+    if (planets.includes(name)) return 'language';
     if (name.includes('Moon')) return 'nights_stay';
     return 'wb_sunny';
   }
@@ -186,7 +177,6 @@ function createGUI() {
     attr(waterslide, 'value', app_state.water_opacity);
     update_forms(app_state.data);
     update_table(star_table, app_state.data.stars, star_row);
-    update_table(land_table, app_state.data.landmarks, land_row);
     reset3D();
   });
 
@@ -215,11 +205,10 @@ function createGUI() {
       app_state.data = JSON.parse(JSON.stringify(examples[i]));
       const d = app_state.data;
       d.stars.forEach(v => v.id = id());
-      d.landmarks.forEach(v => v.id = id());
       attr('form6', 'visible', false);
       update_forms(d);
       update_table(star_table, d.stars, star_row);
-      update_table(land_table, d.landmarks, land_row);
+      free_text_input.value = format_input_as_text(app_state);
       getLocationFix();
     });
   }
@@ -227,6 +216,7 @@ function createGUI() {
   listen_with_enter('calc-fix', 'click', e => {
     attr('form2', 'visible', false);
     get_data_from_forms();
+    free_text_input.value = format_input_as_text(app_state);
     getLocationFix();
   });
 
@@ -241,11 +231,9 @@ function createGUI() {
         app_state.data = JSON.parse(JSON.stringify(valid));
         const d = app_state.data;
         d.stars.forEach(v => v.id = id());
-        d.landmarks.forEach(v => v.id = id());
         attr('formtext', 'visible', false);
         update_forms(d);
         update_table(star_table, d.stars, star_row);
-        update_table(land_table, d.landmarks, land_row);
         getLocationFix();
       } catch (parseError) {
         console.error(parseError);
@@ -265,21 +253,24 @@ function createGUI() {
     update_table(star_table, app_state.data.stars, star_row);
   });
 
-  listen_with_enter('add-landmark', 'click', e => {
-    const n = land_name.value;
-    const lat = land_lat.value;
-    const lon = land_lon.value;
-    const dist = land_dist.value;
-    app_state.data.landmarks.push({ id: id(), name: n, lat: lat, lon: lon, distance: dist });
-    update_table(land_table, app_state.data.landmarks, land_row);
-  });
-
   listen_with_enter('save-csv', 'click', e => {
     const d = new Date();
     const csv = encodeURI("data:text/csv;charset=utf-8," + worksheet_csv(app_state));
     const link = create('a', [
       'href', csv,
       'download', `worksheet-${d.getFullYear()}-${1 + d.getMonth()}-${d.getDate()}_${d.getHours()}_${d.getMinutes()}_${d.getSeconds()}.csv`
+    ]);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+
+  listen_with_enter('save-txt', 'click', e => {
+    const d = new Date();
+    const text = encodeURI("data:text/plain;charset=utf-8," + format_input_as_text(app_state));
+    const link = create('a', [
+      'href', text,
+      'download', `celestial-navigation-${d.getFullYear()}-${1 + d.getMonth()}-${d.getDate()}_${d.getHours()}_${d.getMinutes()}_${d.getSeconds()}.txt`
     ]);
     document.body.appendChild(link);
     link.click();
@@ -322,6 +313,11 @@ function createGUI() {
     attr(obs_actlon, 'disabled', !sw_act_pos.active);
   });
 
+  listen(sw_has_dr, 'active-changed', e => {
+    attr(obs_drlat, 'disabled', !sw_has_dr.active);
+    attr(obs_drlon, 'disabled', !sw_has_dr.active);
+  });
+
   function rotate_sky(diff) {
     app_state.sky_rotation += diff;
     if (360 <= app_state.sky_rotation) app_state.sky_rotation -= 360;
@@ -353,7 +349,6 @@ function createGUI() {
         break;
       case 'KeyL':
         sw_labels.active = !sw_labels.active;
-        //app_state.toggle_labels();
         break;
       default:
     }

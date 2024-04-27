@@ -6,7 +6,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "grammar": "nearleyc examples/grammar.ne > grammar.js && sed -E 's/\"i($|[ :|)])/\"\\1/g' examples/grammar.ne | nearley-railroad | grep -v -E \"( *</body> *| *</html> *)\"| tail -n \"+33\" > html/grammar.html"
   },
   "repository": {
     "type": "git",

@@ -1,11 +1,9 @@
-# Example from the book Hawaii ny sextant
+# Example from the book Hawaii by sextant
 
 date: 1982-07-16
 height: 2.7432 meter
 timezone: GMT-7
 ded reckoning: 28d 33' , -142d 41'
-compare: 28d 32', -142d 39.6'
-
 compare: 28d 32', -142d 39.6'
 
 star: Deneb
