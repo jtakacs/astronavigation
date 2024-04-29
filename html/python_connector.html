@@ -45,7 +45,8 @@
                 "stars"         : create_proxy(lambda: to_js(stars())),
                 "almanac_page"  : create_proxy(lambda y, m, d: to_js(almanac(y, m, d), dict_converter=Object.fromEntries)),
                 "parallax"      : create_proxy(lambda hp, altitude: to_js(parallax(hp, altitude))),
-                "sunpath"       : create_proxy(lambda date, latitude, longitude, elevation_m, temperature_C, pressure_mbar: to_js(sunpath(date, latitude, longitude, elevation_m, temperature_C, pressure_mbar), dict_converter=Object.fromEntries)),
+                "sun_lat"       : create_proxy(lambda date: to_js(sun_lat(date), dict_converter=Object.fromEntries)),
+                "sunpath"       : create_proxy(lambda date, minutes, latitude, longitude, elevation_m, temperature_C, pressure_mbar: to_js(sunpath(date, minutes, latitude, longitude, elevation_m, temperature_C, pressure_mbar), dict_converter=Object.fromEntries)),
             }, dict_converter=Object.fromEntries)
         window.setTimeout(create_proxy(lambda: window.main(alma)), 0)
         pass

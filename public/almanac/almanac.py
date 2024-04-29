@@ -189,20 +189,24 @@ def parallax(hp, altitude):
     return hp * cos(altitude * pi / 180)
 
 
-def sunpath(date, latitude, longitude, elevation_m, temperature_C, pressure_mbar):
+def sun_lat(date):
     _init()
-    time = almanac.timescale.ut1(date.y, date.m, date.d, 0, list(range(24*60+1)), 0)
+    time = almanac.timescale.ut1(date.y, date.m, date.d, 0, 0, 0)
+    ra, decl, distance = _observe(time, almanac.planets['Sun'])
+    return decl.degrees
+
+
+def sunpath(date, minutes, latitude, longitude, elevation_m, temperature_C, pressure_mbar):
+    _init()
+    time = almanac.timescale.ut1(date.y, date.m, date.d, 0, minutes, 0)
     location = almanac.earth + wgs84.latlon(
         latitude,
         longitude,
         elevation_m)
     alt, az, dist = location.at(time).observe(almanac.planets['Sun']).apparent().altaz(temperature_C=temperature_C, pressure_mbar=pressure_mbar)
-    result = []
-    for i in range(len(alt.degrees)):
-        result.append({
-            "index": i,
-            "time": time.utc_iso()[i],
-            "altitude": alt.degrees[i],
-            "azimuth": az.degrees[i],
-        })
-    return result
+    return {
+        "time": time.utc_iso(),
+        "altitude": alt.degrees,
+        "azimuth": az.degrees,
+    }
+

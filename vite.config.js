@@ -10,6 +10,8 @@ export default defineConfig({
       input: {
         index: resolve(__dirname, "index.html"),
         solstice: resolve(__dirname, "solstice.html"),
+        globe: resolve(__dirname, "globe.html"),
+        flerf: resolve(__dirname, "flerf.html"),
       }
     },
   },
