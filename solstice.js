@@ -33,7 +33,7 @@ const txt = (function () {
 const { PI } = Math;
 const deg = PI / 180;
 const radius = 25;
-const dist = 50;
+const dist = 25;
 const gnomon_height = 5;
 const origin = new THREE.Vector3(0, 0, 0);
 const near = 0.1;
@@ -45,6 +45,8 @@ const gnomon_mat = new THREE.MeshPhysicalMaterial({ map: txt("textures/wood.png"
 const state = {
     almanac: null,
     animate: false,
+    fe: false,
+    real: true,
     date: { y: 2024, m: 12, d: 21 },
     observer:
     {
@@ -61,7 +63,6 @@ let time = 0;
 const max_time = 24 * 60 + 1;
 let full_circle = false;
 let scene = null;
-let sun_lat = 0;
 let fake_data = [];
 
 function step() {
@@ -73,6 +74,7 @@ function step() {
 const txt_time = el("txt-time");
 const tgl_anim = el("tgl-anim");
 const tgl_flerf = el('tgl-flerf');
+const tgl_real = el('tgl-real');
 const spinner = el("spinner");
 spinner.style.display = 'none';
 const txt_alt = el("txt-alt");
@@ -122,7 +124,6 @@ fakesun.castShadow = true;
 fakesun.shadow.mapSize.width = 4096;
 fakesun.shadow.mapSize.height = 4096;
 fakesun.add(fakesprite);
-fakesun.visible = false;
 
 const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, near, far);
 camera.position.set(7, 20, 7);
@@ -149,7 +150,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const orbitControls = new OrbitControls(camera, renderer.domElement);
-orbitControls.enablePan = false;
+// orbitControls.enablePan = false;
 orbitControls.minPolarAngle = 0;
 orbitControls.maxPolarAngle = PI / 2 - 1e-4;
 orbitControls.minDistance = near * 2;
@@ -182,6 +183,7 @@ function path(scene, data) {
     const path = new Line2(geom, mat);
     path.name = 'path';
     path.computeLineDistances();
+    path.visible = state.real;
     scene.add(path);
 }
 
@@ -200,6 +202,7 @@ function create_scene(obs) {
     sun.shadow.mapSize.height = 4096;
     sun.add(sprite);
     sun.position.copy(pos);
+    sun.visible = state.real;
 
     const gnomon = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, gnomon_height, 32, 1, false), gnomon_mat);
     gnomon.name = 'gnomon';
@@ -210,6 +213,7 @@ function create_scene(obs) {
 
     const pointer = new THREE.ArrowHelper(pos.normalize(), origin, dist, colors[0], 0, 0);
     pointer.name = 'pointer';
+    pointer.visible = state.real;
 
     const scene = new THREE.Object3D();
     scene.add(sun);
@@ -230,6 +234,14 @@ listen(window, 'resize', e => {
 });
 
 function start() {
+    const obs = state.observer;
+    obs.base = latlon2xy(obs.lat, obs.lon);
+    load_data(state.date, 0, obs.lat, obs.lon, obs.elevation, obs.temp, obs.pressure);
+    scene = create_scene(obs);
+    asdf.add(scene);
+    const sun_lat = state.almanac.sun_lat(state.date);
+    fake(sun_lat, asdf);
+    state.animate = true;
     let past = 0;
     function reanimate(now) {
         const delta = now - past;
@@ -285,38 +297,38 @@ function fake(lat, scene) {
     const fakepath = new Line2(geom, mat);
     fakepath.name = 'fakepath';
     fakepath.computeLineDistances();
-    fakepath.visible = false;
+    fakepath.visible = state.fe;
     scene.add(fakepath);
     const pos = fake_data[0].clone();
     fakesun.position.copy(pos);
-    fakesun.visible = false;
+    fakesun.visible = state.fe;
 }
 
 window.main = function (almanac) {
     state.almanac = almanac;
-    const obs = state.observer;
-    obs.base = latlon2xy(obs.lat, obs.lon);
-    load_data(state.date, 0, obs.lat, obs.lon, obs.elevation, obs.temp, obs.pressure);
-    scene = create_scene(obs);
-    asdf.add(scene);
-    sun_lat = almanac.sun_lat(state.date);
-    fake(sun_lat, asdf);
     const loaders = document.getElementsByTagName('py-splashscreen');
     for (let idx = loaders.length; 0 < idx; loaders[--idx].remove());
     attr('obs-date', 'value', html5_date_string(state.date)).shadowRoot.querySelector('input[type="date"]').style.colorScheme = 'dark';
     listen(tgl_anim, 'active-changed', e => state.animate = tgl_anim.active);
     listen(tgl_flerf, 'active-changed', e => {
-        const v = tgl_flerf.active;
+        state.fe = tgl_flerf.active;
         const fakepath = asdf.getObjectByName('fakepath');
-        fakesun.visible = v;
-        fakepath.visible = v;
+        fakesun.visible = state.fe;
+        fakepath.visible = state.fe;
+    });
+    listen(tgl_real, 'active-changed', e => {
+        state.real = tgl_real.active;
+        const sun = scene.getObjectByName('sun');
+        const path = asdf.getObjectByName('path');
+        const pointer = asdf.getObjectByName('pointer');
+        sun.visible = state.real;
+        path.visible = state.real;
+        pointer.visible = state.real;
     });
     listen(btn_load, 'click', e => {
-        state.animate = false;
         time = 0;
         full_circle = false;
         cache.length = 0;
-        fake_data = [];
         const date = getval(obs_date).split('-');
         state.date = {
             y: parseInt(date[0], 10),
@@ -334,11 +346,9 @@ window.main = function (almanac) {
         asdf.remove(scene);
         scene = create_scene(obs);
         asdf.add(scene);
-        sun_lat = almanac.sun_lat(state.date);
+        const sun_lat = almanac.sun_lat(state.date);
         fake(sun_lat, asdf);
-        state.animate = true;
         menu.visible = false;
     });
-    state.animate = true;
-    start();
+    setTimeout(start, 100);
 };
