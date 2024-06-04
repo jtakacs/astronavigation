@@ -109,9 +109,9 @@ flerf.position.y = Number.EPSILON;
 flerf.castShadow = false;
 flerf.receiveShadow = true;
 
-const group = new THREE.Object3D();
-group.add(plane);
-group.add(flerf);
+const flat_plane = new THREE.Object3D();
+flat_plane.add(plane);
+flat_plane.add(flerf);
 
 const fakesprite = new THREE.Sprite(sun_mat);
 fakesprite.name = 'fakesprite';
@@ -129,12 +129,12 @@ const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.inner
 camera.position.set(7, 20, 7);
 camera.updateProjectionMatrix();
 
-const asdf = new THREE.Scene();
-// asdf.add(new THREE.AxesHelper(100));
-asdf.add(new THREE.AmbientLight(0xffffff, 0.5));
-asdf.add(group);
-asdf.add(fakesun);
-asdf.add(camera);
+const base_scene = new THREE.Scene();
+// base_scene.add(new THREE.AxesHelper(100));
+base_scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+base_scene.add(flat_plane);
+base_scene.add(fakesun);
+base_scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector('#canvas'),
@@ -238,9 +238,9 @@ function start() {
     obs.base = latlon2xy(obs.lat, obs.lon);
     load_data(state.date, 0, obs.lat, obs.lon, obs.elevation, obs.temp, obs.pressure);
     scene = create_scene(obs);
-    asdf.add(scene);
+    base_scene.add(scene);
     const sun_lat = state.almanac.sun_lat(state.date);
-    fake(sun_lat, asdf);
+    fake(sun_lat, base_scene);
     state.animate = true;
     let past = 0;
     function reanimate(now) {
@@ -265,7 +265,7 @@ function start() {
             }
         }
         orbitControls.update();
-        renderer.render(asdf, camera);
+        renderer.render(base_scene, camera);
         requestAnimationFrame(reanimate);
     };
     requestAnimationFrame(reanimate);
@@ -283,7 +283,7 @@ function fake(lat, scene) {
     const curve = [];
     fake_data = [];
     for (let t = 0; t < max_time; t++) {
-        const theta = 2 * PI * t / (max_time - 1);
+        const theta = PI * (0.5 + 2 * t / (max_time - 1));
         const x = sun_r * Math.cos(theta);
         const z = sun_r * Math.sin(theta);
         fake_data.push(new THREE.Vector3(x, y, z));
@@ -312,15 +312,15 @@ window.main = function (almanac) {
     listen(tgl_anim, 'active-changed', e => state.animate = tgl_anim.active);
     listen(tgl_flerf, 'active-changed', e => {
         state.fe = tgl_flerf.active;
-        const fakepath = asdf.getObjectByName('fakepath');
+        const fakepath = base_scene.getObjectByName('fakepath');
         fakesun.visible = state.fe;
         fakepath.visible = state.fe;
     });
     listen(tgl_real, 'active-changed', e => {
         state.real = tgl_real.active;
         const sun = scene.getObjectByName('sun');
-        const path = asdf.getObjectByName('path');
-        const pointer = asdf.getObjectByName('pointer');
+        const path = base_scene.getObjectByName('path');
+        const pointer = base_scene.getObjectByName('pointer');
         sun.visible = state.real;
         path.visible = state.real;
         pointer.visible = state.real;
@@ -343,11 +343,11 @@ window.main = function (almanac) {
         obs.pressure = parseFloat(getval(obs_press));
         obs.base = latlon2xy(obs.lat, obs.lon);
         load_data(state.date, 0, obs.lat, obs.lon, obs.elevation, obs.temp, obs.pressure);
-        asdf.remove(scene);
+        base_scene.remove(scene);
         scene = create_scene(obs);
-        asdf.add(scene);
+        base_scene.add(scene);
         const sun_lat = almanac.sun_lat(state.date);
-        fake(sun_lat, asdf);
+        fake(sun_lat, base_scene);
         menu.visible = false;
     });
     setTimeout(start, 100);

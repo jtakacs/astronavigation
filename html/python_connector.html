@@ -47,6 +47,7 @@
                 "parallax"      : create_proxy(lambda hp, altitude: to_js(parallax(hp, altitude))),
                 "sun_lat"       : create_proxy(lambda date: to_js(sun_lat(date), dict_converter=Object.fromEntries)),
                 "sunpath"       : create_proxy(lambda date, minutes, latitude, longitude, elevation_m, temperature_C, pressure_mbar: to_js(sunpath(date, minutes, latitude, longitude, elevation_m, temperature_C, pressure_mbar), dict_converter=Object.fromEntries)),
+                "solarnoon"     : create_proxy(lambda lat, lon, y, m, d: to_js(solarnoon(lat, lon, y, m, d), dict_converter=Object.fromEntries)),
             }, dict_converter=Object.fromEntries)
         window.setTimeout(create_proxy(lambda: window.main(alma)), 0)
         pass

@@ -1,6 +1,7 @@
 import os
 from skyfield.jpllib import SpiceKernel
 from skyfield.api import Star, Loader, wgs84
+from skyfield.almanac import meridian_transits, find_discrete
 from datetime import date, datetime, timezone, timedelta
 from math import degrees, atan, tan, copysign, pi, cos
 
@@ -131,6 +132,7 @@ def _init():
         almanac.timescale = Loader(cwd).timescale(builtin=False)  # loads finals2000A.all
         almanac.hipparcos = _hipparcos(f'{cwd}/Hipparcos.csv')
         eph = SpiceKernel(f'{cwd}/de421.bsp')
+        almanac.eph = eph
         almanac.earth = eph['earth']
         almanac.moon = eph['moon']
         almanac.planets = {
@@ -208,5 +210,21 @@ def sunpath(date, minutes, latitude, longitude, elevation_m, temperature_C, pres
         "time": time.utc_iso(),
         "altitude": alt.degrees,
         "azimuth": az.degrees,
+    }
+
+def solarnoon(lat, lon, y, m, d):
+    _init()
+
+    location = wgs84.latlon(lat, lon)
+    t0 = almanac.timescale.utc(y, m, d-1)
+    t1 = almanac.timescale.utc(y, m, d+1)
+
+    f = meridian_transits(almanac.eph, almanac.planets['Sun'], location)
+    times, events = find_discrete(t0, t1, f)
+    noon = times[events == 1][-1].utc_datetime()
+
+    return {
+        "date": { "y": noon.year, "m": noon.month, "d": noon.day },
+        "time": { "h": noon.hour, "m": noon.minute, "s": noon.second },
     }
 
