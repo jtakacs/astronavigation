@@ -111,18 +111,19 @@ def _hipparcos(file):
     with open(file, 'r') as fobj:
         next(fobj)
         for line in fobj:
-            line = [l.strip() for l in line.split('|')]
-            catalog.append({
-                'HIP': int(line[0]),
-                'name': line[1],
-                'magnitude': float(line[2]),
-                'position': Star(
-                    ra_hours=float(line[3]) / 15.0,
-                    dec_degrees=float(line[4]),
-                    parallax_mas=float(line[5]),
-                    ra_mas_per_year=float(line[6]),
-                    dec_mas_per_year=float(line[7]),
-                    epoch=1991.25 * 365.25 + 1721045.0)})
+            if "" != line.strip():
+                line = [l.strip() for l in line.split('|')]
+                catalog.append({
+                    'HIP': int(line[0]),
+                    'name': line[1],
+                    'magnitude': float(line[2]),
+                    'position': Star(
+                        ra_hours=float(line[3]) / 15.0,
+                        dec_degrees=float(line[4]),
+                        parallax_mas=float(line[5]),
+                        ra_mas_per_year=float(line[6]),
+                        dec_mas_per_year=float(line[7]),
+                        epoch=1991.25 * 365.25 + 1721045.0)})
     return catalog
 
 
@@ -211,6 +212,17 @@ def sunpath(date, minutes, latitude, longitude, elevation_m, temperature_C, pres
         "altitude": alt.degrees,
         "azimuth": az.degrees,
     }
+
+def sunpath_hires(date, hour, latitude, longitude, elevation_m, temperature_C, pressure_mbar):
+    _init()
+    time = almanac.timescale.ut1(date.y, date.m, date.d, hour, 0, range(60*60))
+    location = almanac.earth + wgs84.latlon(
+        latitude,
+        longitude,
+        elevation_m)
+    alt, az, dist = location.at(time).observe(almanac.planets['Sun']).apparent().altaz(temperature_C=temperature_C, pressure_mbar=pressure_mbar)
+    result = [{ "time": time.utc_iso()[i], "altitude": alt.degrees[i], "azimuth": az.degrees[i],} for i in range(60*60)]
+    return result
 
 def solarnoon(lat, lon, y, m, d):
     _init()
