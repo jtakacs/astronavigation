@@ -50,13 +50,14 @@ altitude, azimuth, distance = (
     .apparent()
     .altaz(temperature_C=temperature_C, pressure_mbar=pressure_mbar))
 
-with open('shadow.csv', 'w') as csv:
-    csv.write("time UTC | azimuth deg | altitude deg | cotangent | shadow cm\n")
+with open('shadow2.csv', 'w') as csv:
+    csv.write("time UTC | azimuth deg | altitude deg | cotangent | shadow cm | shadow azimuth deg\n")
     for idx in range(len(time)):
         ts = time.utc_iso()[idx]
         azi = azimuth.degrees[idx]
         alt = altitude.degrees[idx]
         cot = 1 / tan(radians(alt))
         shadow= gnomon_cm * cot
-        csv.write(f"{ts} | {azi} | {alt} | {cot} | {shadow}\n")
+        sh_azi = (180 + azi) % 360
+        csv.write(f"{ts} | {azi} | {alt} | {cot} | {shadow} | {sh_azi}\n")
 
